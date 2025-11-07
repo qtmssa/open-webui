@@ -13,6 +13,7 @@
 		showControls,
 		showSidebar,
 		temporaryChatEnabled,
+		theme,
 		user
 	} from '$lib/stores';
 
@@ -38,6 +39,7 @@
 	import ChatPlus from '../icons/ChatPlus.svelte';
 	import ChatCheck from '../icons/ChatCheck.svelte';
 	import Knobs from '../icons/Knobs.svelte';
+	import ThemeToggle from '../icons/ThemeToggle.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -57,6 +59,45 @@
 
 	let showShareChatModal = false;
 	let showDownloadChatModal = false;
+
+	// 主题切换逻辑
+	const applyTheme = (_theme: string) => {
+		if (_theme === 'system') {
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (prefersDark) {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+			}
+		} else if (_theme === 'dark' || _theme === 'oled-dark') {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+	};
+
+	const toggleTheme = () => {
+		const currentTheme = $theme;
+		let newTheme: string;
+
+		if (currentTheme === 'light' || currentTheme === 'her') {
+			newTheme = 'dark';
+		} else {
+			newTheme = 'light';
+		}
+
+		theme.set(newTheme);
+		localStorage.setItem('theme', newTheme);
+		applyTheme(newTheme);
+	};
+
+	// 判断当前是否为暗色主题
+	$: isDarkTheme =
+		$theme === 'dark' ||
+		$theme === 'oled-dark' ||
+		($theme === 'system' &&
+			typeof window !== 'undefined' &&
+			window.matchMedia('(prefers-color-scheme: dark)').matches);
 </script>
 
 <ShareChatModal bind:show={showShareChatModal} chatId={$chatId} />
@@ -216,6 +257,18 @@
 							</button>
 						</Tooltip>
 					{/if}
+
+					<Tooltip content="切换主题">
+						<button
+							class="flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+							on:click={toggleTheme}
+							aria-label="切换主题"
+						>
+							<div class="m-auto self-center">
+								<ThemeToggle className="size-5" strokeWidth="1.5" isDark={isDarkTheme} />
+							</div>
+						</button>
+					</Tooltip>
 
 					{#if $user !== undefined && $user !== null}
 						<UserMenu

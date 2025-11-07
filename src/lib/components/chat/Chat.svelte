@@ -849,7 +849,8 @@
 
 			if (urlModels.length === 1) {
 				const m = $models.find((m) => m.id === urlModels[0]);
-				if (!m) {
+				selectedModels = urlModels;
+				/* 	if (!m) {
 					const modelSelectorButton = document.getElementById('model-selector-0-button');
 					if (modelSelectorButton) {
 						modelSelectorButton.click();
@@ -864,7 +865,7 @@
 					}
 				} else {
 					selectedModels = urlModels;
-				}
+				} */
 			} else {
 				selectedModels = urlModels;
 			}

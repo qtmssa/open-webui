@@ -438,6 +438,7 @@
 		>
 			<div class="flex w-full justify-between">
 				<div class=" self-center text-xs font-medium">
+					<!-- {$i18n.t('logit_bias')} -->
 					{'logit_bias'}
 				</div>
 				<button

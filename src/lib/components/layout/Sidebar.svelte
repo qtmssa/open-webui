@@ -579,7 +579,6 @@
 							on:click={async (e) => {
 								e.stopImmediatePropagation();
 								e.preventDefault();
-
 								goto('/');
 								newChatHandler();
 							}}
